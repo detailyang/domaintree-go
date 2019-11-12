@@ -4,7 +4,10 @@
   </b>
   <br />
    <a href="https://travis-ci.org/detailyang/domaintree-go"><img src="https://travis-ci.org/detailyang/domaintree-go.svg?branch=master" /></a>
-   <a href="https://ci.appveyor.com/project/detailyang/domaintree-go"><img src="https://ci.appveyor.com/api/projects/status/hbpj944ankoy9sh5?svg=true" /></a>
+   <a href="https://ci.appveyor.com/project/detailyang/domaintree-go"><img src="https://ci.appveyor.com/api/projects/status/aqqolao8dytugq32?svg=true" /></a>
+   <a href="https://godoc.org/github.com/detailyang/domaintree-go">
+      <img src="https://godoc.org/github.com/detailyang/domaintree-go?status.svg"/>
+   </a>
    <br />
    <b>domaintree-go is a yet another domain tree which based on the trie tree but support the following features</b>
    <ul>
