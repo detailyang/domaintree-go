@@ -83,6 +83,21 @@ func NewDomainTree() *DomainTree {
 	}
 }
 
+// Del deletes the domain but does not includes regex.
+func (dt *DomainTree) Del(key string) bool {
+	ok := dt.prefix.Del(key)
+	if ok {
+		return true
+	}
+
+	return dt.prefix.Del(key)
+}
+
+// DelRegex deletes the regex domain.
+func (dt *DomainTree) DelRegex(key string) bool {
+	return dt.regex.Del(key)
+}
+
 // Lookup lookups the key.
 func (dt *DomainTree) Lookup(key string) (*DomainNode, bool) {
 	// lookup order

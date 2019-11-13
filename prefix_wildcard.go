@@ -28,8 +28,8 @@ func (wc *PrefixWildcard) Walk(fn func(key string, value interface{})) {
 	}
 }
 
-func (wc *PrefixWildcard) DelFull(key string) {
-	wc.wh.DelFull(key)
+func (wc *PrefixWildcard) DelFull(key string) bool {
+	return wc.wh.DelFull(key)
 }
 
 func (wc *PrefixWildcard) Lookup(key string) (interface{}, bool) {
@@ -46,6 +46,24 @@ func (wc *PrefixWildcard) Lookup(key string) (interface{}, bool) {
 	}
 
 	return nil, false
+}
+
+func (wc *PrefixWildcard) Del(key string) bool {
+	if key == "*" {
+		wc.DelGlob()
+		return true
+	}
+
+	first := strings.Index(key, "*")
+	if first == -1 {
+		return wc.DelFull(key)
+	}
+
+	return wc.DelWildcard(key)
+}
+
+func (wc *PrefixWildcard) DelGlob() {
+	wc.glob = nil
 }
 
 func (wc *PrefixWildcard) AddGlob(value interface{}) {
@@ -85,12 +103,12 @@ func (wc *PrefixWildcard) AddWildcard(key string, value interface{}) {
 }
 
 // DelWildcard deletes the wildcard match.
-func (wc *PrefixWildcard) DelWildcard(key string) {
+func (wc *PrefixWildcard) DelWildcard(key string) bool {
 	n := strings.Index(key, "*.")
 	if n >= 0 {
 		key = key[n+2:]
 	}
-	wc.wh.delWildcard(key)
+	return wc.wh.delWildcard(key)
 }
 
 func (wc *PrefixWildcard) String() string {

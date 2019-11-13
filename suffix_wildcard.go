@@ -20,8 +20,17 @@ func NewSuffixWildcard() *SuffixWildcard {
 	}
 }
 
-func (wc *SuffixWildcard) DelFull(key string) {
-	wc.wh.DelFull(key)
+func (wc *SuffixWildcard) Del(key string) bool {
+	first := strings.Index(key, "*")
+	if first == -1 {
+		return wc.DelFull(key)
+	}
+
+	return wc.DelWildcard(key)
+}
+
+func (wc *SuffixWildcard) DelFull(key string) bool {
+	return wc.wh.DelFull(key)
 }
 
 // Walk walks the suffix tree.
@@ -69,12 +78,12 @@ func (wc *SuffixWildcard) AddWildcard(key string, value interface{}) {
 }
 
 // DelWildcard deletes the wildcard match.
-func (wc *SuffixWildcard) DelWildcard(key string) {
+func (wc *SuffixWildcard) DelWildcard(key string) bool {
 	n := strings.LastIndex(key, ".*")
 	if n >= 0 {
 		key = key[:n]
 	}
-	wc.wh.delWildcard(key)
+	return wc.wh.delWildcard(key)
 }
 
 func (wc *SuffixWildcard) String() string {

@@ -28,6 +28,16 @@ func (rt *RegexTree) Walk(fn func(key string, value interface{})) {
 	}
 }
 
+func (rt *RegexTree) Del(key string) bool {
+	for i := range rt.regex {
+		if rt.regex[i].key == key {
+			rt.regex = append(rt.regex[:i], rt.regex[i+1:]...)
+			return true
+		}
+	}
+	return false
+}
+
 // Lookup lookups the key in the regex tree.
 func (rt *RegexTree) Lookup(key string) (*regexValue, bool) {
 	for i := range rt.regex {

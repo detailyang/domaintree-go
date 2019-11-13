@@ -95,7 +95,7 @@ func NewWildcardHash(indexer StringIndexer) *WildcardHash {
 	}
 }
 
-func (wc *WildcardHash) delWildcard(key string) {
+func (wc *WildcardHash) delWildcard(key string) bool {
 	sub, remaining, success := wc.indexer(key, ".")
 
 	hv, ok := wc.hash[sub]
@@ -105,7 +105,7 @@ func (wc *WildcardHash) delWildcard(key string) {
 			if hv.hash.Len() == 0 {
 				// TODO(detailyang): cleanup self node
 			}
-			return
+			return true
 		}
 
 		if hv.typ&WildcardHashValueType == WildcardHashValueType {
@@ -120,12 +120,14 @@ func (wc *WildcardHash) delWildcard(key string) {
 		if hv.typ == NodeHashValueType {
 			delete(wc.hash, sub)
 		}
-		return
+		return true
 	}
+
+	return false
 }
 
 // DelFull deletes the full match.
-func (wc *WildcardHash) DelFull(key string) {
+func (wc *WildcardHash) DelFull(key string) bool {
 	sub, remaining, success := wc.indexer(key, ".")
 
 	hv, ok := wc.hash[sub]
@@ -135,7 +137,7 @@ func (wc *WildcardHash) DelFull(key string) {
 			if hv.hash.Len() == 0 {
 				// TODO(detailyang): cleanup self node
 			}
-			return
+			return true
 		}
 
 		if hv.typ&FullHashValueType == FullHashValueType {
@@ -150,8 +152,10 @@ func (wc *WildcardHash) DelFull(key string) {
 		if hv.typ == NodeHashValueType {
 			delete(wc.hash, sub)
 		}
-		return
+		return true
 	}
+
+	return false
 }
 
 func (wc *WildcardHash) add(key string, value interface{}, typ HashValueType) {
