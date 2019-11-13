@@ -63,6 +63,29 @@ func (dt *LockedDomainTree) Add(key string, value interface{}) {
 	dt.Unlock()
 }
 
+// Del deletes the key from the tree (thread-safe).
+func (dt *LockedDomainTree) Del(key string) bool {
+	dt.Lock()
+	ok := dt.dt.Del(key)
+	dt.Unlock()
+	return ok
+}
+
+// DelRegex deletes the regex in the tree (thread-safe).
+func (dt *LockedDomainTree) DelRegex(key string) bool {
+	dt.Lock()
+	ok := dt.dt.DelRegex(key)
+	dt.Unlock()
+	return ok
+}
+
+// Walk walks the domain tree (thread-safe).
+func (dt *LockedDomainTree) Walk(fn func(key string, value interface{})) {
+	dt.RLock()
+	dt.dt.Walk(fn)
+	dt.RUnlock()
+}
+
 // DomainTree holds a domain tree which is like nginx domain search.
 //
 // *.example.com
