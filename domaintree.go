@@ -44,7 +44,7 @@ func NewLockedDomainTree() *LockedDomainTree {
 func (dt *LockedDomainTree) Lookup(key string) (*DomainNode, bool) {
 	dt.RLock()
 	dn, ok := dt.dt.Lookup(key)
-	dt.RLock()
+	dt.RUnlock()
 	return dn, ok
 }
 
